@@ -1,40 +1,23 @@
-from src.constants import *
-from src.player import Player
+from src.utils import *
 
 def main():
+    """Start the game"""
+    game = InitializeGameSpace()
 
-    print("Program Name: " ,__name__)
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) #Initialize the display
-    pygame.display.set_caption("Arc Survival")
-    clock = pygame.time.Clock() #Used to help track time
-    font_name = pygame.font.match_font('arial')
+    background = LoadBackground()
+    sprites = ConfigureSprites()
 
-    #Sprite Groups
-    all_sprites = pygame.sprite.Group()
-
-    #Sprite Objects
-    player = Player()
-
-    all_sprites.add(player)
     # Game Loop
     running = True
     while running:
-        clock.tick(FPS) #Updates the clock Lock the framerate at 60 Frames Per Second
+        running = ProcessEvents()
+        
+        #Updates the clock 60 Frames Per Second
+        game[1].tick(FPS)         
 
-        #Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+        sprites.update()
 
-        #Update
-        all_sprites.update()
-
-        screen.fill(RED)
-        all_sprites.draw(screen)
-
-         #Update the full display Surface to the screen after drawing everything
-        pygame.display.flip()
+        RenderGraphics(game[0],background,sprites)
     
     pygame.quit()
 #If this module is executing the script 
