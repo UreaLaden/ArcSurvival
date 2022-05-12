@@ -5,20 +5,20 @@ def main():
     """Start the game"""
     game = InitializeGameSpace()
     background = LoadBackground()
-    sprites = ConfigureSprites(8)
 
+    configured_sprites = ConfigureSprites(MOB_SIZE)
+    sprites = configured_sprites[0]
     # Game Loop
-    running = True
-    while running:
-        running = ProcessEvents()
-        
+    while running == True:
         #Updates the clock 60 Frames Per Second
         game[1].tick(FPS)         
 
         sprites.update()
-        
+        ProcessEvents()
+
+        ProcessCollisions(configured_sprites)
+
         RenderGraphics(game[0],background,sprites)
-    
         sprites.draw(game[0])
         pygame.display.flip()
     pygame.quit()

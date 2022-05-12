@@ -1,8 +1,9 @@
 import pygame
 from os import path
+import sys
 from src.constants import *
 from src.player import *
-
+from src.collisions import *
 
 def LoadBackground():
     """Returns a tuple contain the background Image and its Rect"""
@@ -15,10 +16,15 @@ def LoadBackground():
 def ProcessEvents():
     """Handles events and user input
     Returns false when user quits"""
+    global running
+
+    keystate = pygame.key.get_pressed()
+    if keystate[pygame.K_ESCAPE]:
+        sys.exit()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            return False
-    return True
+            running = False
+            sys.exit()
 
 def InitializeGameSpace():
     """Game Window setup and config. 

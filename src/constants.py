@@ -5,6 +5,7 @@ ROOT_DIR = path.realpath(path.join(CURRENT_FILE_DIR,'..'))
 IMG_DIR = path.join(ROOT_DIR,'assets\img')
 PLAYER_IMG = path.join(IMG_DIR,'player_ship.png')
 
+running = True
 
 FPS = 60
 
@@ -20,6 +21,8 @@ SCREEN_WIDTH = 480
 PLAYER_HEIGHT = 80
 PLAYER_WIDTH = 48
 PLAYER_RADIUS = 20
+
+MOB_SIZE = 8
 
 x1 = 0
 x2 = 0

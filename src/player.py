@@ -1,5 +1,7 @@
 import pygame
+import sys
 from src.constants import *
+from src.bullets import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -11,6 +13,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = SCREEN_WIDTH / 2
         self.rect.bottom = SCREEN_HEIGHT - 10
         self.speedx = 0
+        self.shoot_delay = 250
+        self.last_shot = pygame.time.get_ticks()
+        self.power = 1
+
 
     def update(self):
         self.speedx = 0
@@ -19,6 +25,9 @@ class Player(pygame.sprite.Sprite):
             self.speedx = -9.5
         if keystate[pygame.K_RIGHT]:
             self.speedx = 9.5
+        if keystate[pygame.K_SPACE]:
+            self.shoot()   
+        
         self.rect.x += self.speedx
 
         # Keep sprite on screen
@@ -26,4 +35,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = SCREEN_WIDTH
         if self.rect.left < 0:
             self.rect.left = 0
+
+    def shoot(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_shot > self.shoot_delay:
+            self.last_shot = now
+            if self.power == 1:
+                SpawnBullet(self.rect.centerx,self.rect.centery)
+
+
     

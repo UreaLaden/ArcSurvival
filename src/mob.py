@@ -1,4 +1,5 @@
 from src.utils import *
+from src.groups import *
 import random
 
 def GetMeteors() -> pygame.Surface:
@@ -50,7 +51,10 @@ class Mob(pygame.sprite.Sprite):
             self.speed = random.randrange(1,10)
 
 
-def SpawnMob(sprite_group:pygame.sprite.Group,mob_group:pygame.sprite.Group):
+def SpawnMob():
+    """Instantiate a new Mob and add to Sprite group and Mob group"""
+    global sprite_group
+    global mob_group
     m = Mob()
     sprite_group.add(m)
     mob_group.add(m)
