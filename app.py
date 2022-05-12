@@ -4,7 +4,6 @@ from src.sprites import *
 def main():
     """Start the game"""
     game = InitializeGameSpace()
-
     background = LoadBackground()
     sprites = ConfigureSprites(8)
 
@@ -17,9 +16,11 @@ def main():
         game[1].tick(FPS)         
 
         sprites.update()
-
+        
         RenderGraphics(game[0],background,sprites)
     
+        sprites.draw(game[0])
+        pygame.display.flip()
     pygame.quit()
 #If this module is executing the script 
 #the global variable __name__ gets set to __main__
