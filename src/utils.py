@@ -2,7 +2,6 @@ import pygame
 from os import path
 from src.constants import *
 from src.player import *
-from src.sprites import *
 
 
 def LoadBackground():

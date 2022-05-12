@@ -1,11 +1,12 @@
 from src.utils import *
+from src.sprites import *
 
 def main():
     """Start the game"""
     game = InitializeGameSpace()
 
     background = LoadBackground()
-    sprites = ConfigureSprites()
+    sprites = ConfigureSprites(8)
 
     # Game Loop
     running = True
