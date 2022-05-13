@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = SCREEN_WIDTH / 2
         self.rect.bottom = SCREEN_HEIGHT - 10
         self.speedx = 0
+        self.shield = 100
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
         self.power = 1
@@ -42,6 +43,11 @@ class Player(pygame.sprite.Sprite):
             self.last_shot = now
             if self.power == 1:
                 SpawnBullet(self.rect.centerx,self.rect.centery)
+
+    def hide(self):
+        self.hidden = True
+        self.hide_time = pygame.time.get_ticks()
+        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT + 200)
 
 
     

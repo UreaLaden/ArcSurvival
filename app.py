@@ -3,22 +3,25 @@ from src.sprites import *
 
 def main():
     """Start the game"""
+
     game = InitializeGameSpace()
     background = LoadBackground()
-
-    configured_sprites = ConfigureSprites(MOB_SIZE)
-    sprites = configured_sprites[0]
+    score = "Hello Leaundrae, Let's Play a Game"
+    running = True
+    game_over = True
     # Game Loop
     while running == True:
+        if game_over:
+            game_over = False    
+            configured_sprites = ConfigureSprites(MOB_SIZE)
+            sprites = configured_sprites[0]
+
         #Updates the clock 60 Frames Per Second
         game[1].tick(FPS)         
-
         sprites.update()
-        ProcessEvents()
-
+        RenderGraphics(game[0],background,sprites,score,game[2],configured_sprites[2])
         ProcessCollisions(configured_sprites)
-
-        RenderGraphics(game[0],background,sprites)
+        ProcessEvents()
         sprites.draw(game[0])
         pygame.display.flip()
     pygame.quit()

@@ -1,6 +1,8 @@
 from src.utils import *
 from src.groups import *
+from src.constants import *
 import random
+
 
 def GetMeteors() -> pygame.Surface:
     """Take all of our meteor images to a list for later"""
@@ -52,7 +54,7 @@ class Mob(pygame.sprite.Sprite):
 
 
 def SpawnMob():
-    """Instantiate a new Mob and add to Sprite group and Mob group"""
+    """Instantiate a new Meteor Mob and add to Sprite group and Mob group"""
     global sprite_group
     global mob_group
     m = Mob()

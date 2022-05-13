@@ -5,7 +5,7 @@ ROOT_DIR = path.realpath(path.join(CURRENT_FILE_DIR,'..'))
 IMG_DIR = path.join(ROOT_DIR,'assets\img')
 PLAYER_IMG = path.join(IMG_DIR,'player_ship.png')
 
-running = True
+score = 0
 
 FPS = 60
 

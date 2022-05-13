@@ -36,19 +36,22 @@ def InitializeGameSpace():
     pygame.display.set_caption("Arc Survival") #Set the window Title
     clock = pygame.time.Clock() #Used to help track time
     font_name = GameFont('arial')
+    
     return (screen,clock,font_name)
 
 def GameFont(font: str):
     return pygame.font.match_font(font)
 
 def RenderGraphics(screen : pygame.Surface,background:tuple[pygame.Surface,pygame.Rect],
-sprites:pygame.sprite.Group):
+sprites:pygame.sprite.Group,score:str,font:str,player:Player):
         """Update the full display Surface to the screen after drawing everything"""
 
         ScrollBackground(screen,background[0],background[1])
 
         sprites.draw(screen)
 
+        DrawUIText(screen,font,str(score),18,SCREEN_WIDTH / 2, 10)
+        DrawHealthBar(screen,5,5,player.shield)
         pygame.display.flip()
 
 def ScrollBackground(screen:pygame.Surface,background:pygame.Surface,rect:pygame.Rect):
@@ -72,4 +75,26 @@ def ScrollBackground(screen:pygame.Surface,background:pygame.Surface,rect:pygame
         y1 = -SCREEN_HEIGHT
     if y2 > SCREEN_HEIGHT:
         y2 = -SCREEN_HEIGHT
-  
+
+def DrawUIText(screen:pygame.Surface,font_name:str,text,size:int,x:int,y:int):
+    """Renders UI onto the Screen
+        screen,font_name,text,size,x,y
+    """
+    font = pygame.font.Font(font_name,size)
+    text_surface = font.render(text,True,WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x,y)
+    screen.blit(text_surface,text_rect)
+
+
+def DrawHealthBar(screen,x,y,health):
+    if health < 0:
+        health = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 10
+    fill = (health / 100) * BAR_LENGTH
+    outline_rect = pygame.Rect(x,y,BAR_LENGTH,BAR_HEIGHT)
+    fill_rect = pygame.Rect(x,y,fill,BAR_HEIGHT)
+    pygame.draw.rect(screen,GREEN,fill_rect)
+    pygame.draw.rect(screen,WHITE,outline_rect,2)
+#def DrawLives()
