@@ -1,6 +1,7 @@
 import pygame
+from os import path
 from src.constants import *
-from src.groups import *
+from src.gamemanager import *
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -17,12 +18,8 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
-def SpawnBullet(x:int,y:int):
-    global sprite_group
-    global bullet_group
-
+def SpawnBullet(game:GameManager,x:int,y:int):
     bullet = Bullet(x,y)
-
-    sprite_group.add(bullet)
-    bullet_group.add(bullet)
+    game.all_sprites.add(bullet)
+    game.bullet_group.add(bullet)
 

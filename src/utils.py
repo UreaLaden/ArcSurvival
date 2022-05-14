@@ -1,100 +1,71 @@
-import pygame
-from os import path
-import sys
-from src.constants import *
+from sys import exit
+from src.gamemanager import *
+from src.mob import *
 from src.player import *
-from src.collisions import *
 
-def LoadBackground():
-    """Returns a tuple contain the background Image and its Rect"""
-    img_dir = path.join(IMG_DIR,'Background-4.jpg')
-    image = pygame.image.load(img_dir).convert()
-    rect = image.get_rect()
+def ConfigureSprites(game:GameManager):
+    """Creates our Sprite Group, adds
+    the relevant Sprite Objects to the Group
+    rent returns all of the sprite groups
+    (sprite_group,mob_group,player,bullet_group)
+    """
+    #Sprite Objects
+    game.all_sprites = pygame.sprite.Group()
+    game.mob_group = pygame.sprite.Group()
+    game.bullet_group = pygame.sprite.Group()
+    game.player = Player(game)
     
-    return (image,rect)
+    for _ in range(game.mob_size):
+        SpawnMob(game)
 
-def ProcessEvents():
+    game.all_sprites.add(game.bullet_group)
+    game.all_sprites.add(game.player)
+
+def ProcessEvents(game:GameManager):
     """Handles events and user input
     Returns false when user quits"""
-    global running
 
     keystate = pygame.key.get_pressed()
     if keystate[pygame.K_ESCAPE]:
-        sys.exit()
+        exit()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-            sys.exit()
+            game.running = False
 
-def InitializeGameSpace():
-    """Game Window setup and config. 
-       Good point to discuss Tuples
-       (screen,clock,font_name)   
-    """
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) #Initialize the display
-    pygame.display.set_caption("Arc Survival") #Set the window Title
-    clock = pygame.time.Clock() #Used to help track time
-    font_name = GameFont('arial')
-    
-    return (screen,clock,font_name)
-
-def GameFont(font: str):
-    return pygame.font.match_font(font)
-
-def RenderGraphics(screen : pygame.Surface,background:tuple[pygame.Surface,pygame.Rect],
-sprites:pygame.sprite.Group,score:str,font:str,player:Player):
+def RenderGraphics(game:GameManager):
         """Update the full display Surface to the screen after drawing everything"""
 
-        ScrollBackground(screen,background[0],background[1])
+        ScrollBackground(game)
 
-        sprites.draw(screen)
+        game.all_sprites.draw(game.screen)
 
-        DrawUIText(screen,font,str(score),18,SCREEN_WIDTH / 2, 10)
-        DrawHealthBar(screen,5,5,player.shield)
+        game.DrawUIText(18,SCREEN_WIDTH / 2, 10)
+        game.DrawHealthBar(5,5,game.player.shield)
+        game.DrawLives(SCREEN_WIDTH - 100,5,game.player.lives)
+
         pygame.display.flip()
 
-def ScrollBackground(screen:pygame.Surface,background:pygame.Surface,rect:pygame.Rect):
+def ScrollBackground(game:GameManager):
     """Scroll the Background image vertically"""
     #This explicit declaration is required to remind us that we are actually modifying
     #the value of the variable in the outer scope
-    global x1
-    global x2
-    global y1
-    global y2
+    x1 = game.x1
+    x2 = game.x2
+    y1 = game.y1
+    y2 = game.y2
+    background_surface = game.background[0]
+    rect = game.background[1]
     
-    screen.blit(background,rect)
+    game.screen.blit(background_surface,rect)
 
-    y2 += 10
-    y1 += 10
+    game.y2 += 10
+    game.y1 += 10
     
-    screen.blit(background,(x1,y1))
-    screen.blit(background,(x2,y2))
+    game.screen.blit(background_surface,(x1,y1))
+    game.screen.blit(background_surface,(x2,y2))
     
     if y1 > SCREEN_HEIGHT:
-        y1 = -SCREEN_HEIGHT
+        game.y1 = -SCREEN_HEIGHT
     if y2 > SCREEN_HEIGHT:
-        y2 = -SCREEN_HEIGHT
+        game.y2 = -SCREEN_HEIGHT
 
-def DrawUIText(screen:pygame.Surface,font_name:str,text,size:int,x:int,y:int):
-    """Renders UI onto the Screen
-        screen,font_name,text,size,x,y
-    """
-    font = pygame.font.Font(font_name,size)
-    text_surface = font.render(text,True,WHITE)
-    text_rect = text_surface.get_rect()
-    text_rect.midtop = (x,y)
-    screen.blit(text_surface,text_rect)
-
-
-def DrawHealthBar(screen,x,y,health):
-    if health < 0:
-        health = 0
-    BAR_LENGTH = 100
-    BAR_HEIGHT = 10
-    fill = (health / 100) * BAR_LENGTH
-    outline_rect = pygame.Rect(x,y,BAR_LENGTH,BAR_HEIGHT)
-    fill_rect = pygame.Rect(x,y,fill,BAR_HEIGHT)
-    pygame.draw.rect(screen,GREEN,fill_rect)
-    pygame.draw.rect(screen,WHITE,outline_rect,2)
-#def DrawLives()

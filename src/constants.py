@@ -1,11 +1,9 @@
-from os import path,listdir
+from os import path
 
 CURRENT_FILE_DIR = path.dirname(__file__)
 ROOT_DIR = path.realpath(path.join(CURRENT_FILE_DIR,'..'))
 IMG_DIR = path.join(ROOT_DIR,'assets\img')
 PLAYER_IMG = path.join(IMG_DIR,'player_ship.png')
-
-score = 0
 
 FPS = 60
 
@@ -24,7 +22,4 @@ PLAYER_RADIUS = 20
 
 MOB_SIZE = 8
 
-x1 = 0
-x2 = 0
-y1 = 0
-y2 = -SCREEN_HEIGHT
+

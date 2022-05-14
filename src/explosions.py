@@ -1,6 +1,4 @@
-import pygame
-from src.constants import *
-
+from src.gamemanager import *
 
 explosion_anim = {}
 explosion_anim['lg'] = []

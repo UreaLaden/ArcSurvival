@@ -1,7 +1,7 @@
-from src.utils import *
-from src.groups import *
-from src.constants import *
+
+from src.gamemanager import *
 import random
+from os import listdir
 
 
 def GetMeteors() -> pygame.Surface:
@@ -53,10 +53,8 @@ class Mob(pygame.sprite.Sprite):
             self.speed = random.randrange(1,10)
 
 
-def SpawnMob():
+def SpawnMob(game:GameManager):
     """Instantiate a new Meteor Mob and add to Sprite group and Mob group"""
-    global sprite_group
-    global mob_group
     m = Mob()
-    sprite_group.add(m)
-    mob_group.add(m)
+    game.all_sprites.add(m)
+    game.mob_group.add(m)

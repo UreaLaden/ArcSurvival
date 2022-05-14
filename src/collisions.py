@@ -1,50 +1,48 @@
-import sys
-from tkinter import scrolledtext
-import pygame
-from src.explosions import Explosion
+from src.gamemanager import *
+from src.explosions import *
 from src.mob import *
 
 def CheckCollision(first_group:pygame.sprite.Group,second_group:pygame.sprite.Group,dokill:bool = True,dokill2:bool = True) -> bool:
     return pygame.sprite.groupcollide(first_group,second_group,dokill,dokill2)
 
-def ProcessCollisions(all_sprites:tuple[pygame.sprite.Group,...]) -> bool :
+def ProcessCollisions(game:GameManager) -> bool :
     """Accepts the Tuple containing all of the configured sprites. Process all 
     collisions and return False when the player is hit"""
 
-    global running
-    global sprite_group
-    mob = all_sprites[1]
-    player = all_sprites[2]
-    bullet = all_sprites[3]
+    mob = game.mob_group
+    player = game.player
+    bullet = game.bullet_group
 
     player_hit = pygame.sprite.spritecollide(player,mob,True,pygame.sprite.collide_circle)
     mob_hits = pygame.sprite.groupcollide(mob,bullet,True,True)
 
-    HandlePlayerCollisions(player,player_hit)
-    HandleMobCollisions(mob,mob_hits)
+    HandlePlayerCollisions(game,player_hit)
+    HandleMobCollisions(game,mob_hits)
 
 
-def HandlePlayerCollisions(player:pygame.sprite.Group,player_hit:list[pygame.sprite.Sprite]):
+def HandlePlayerCollisions(game:GameManager,player_hit:list[pygame.sprite.Sprite],):
     """Handles collisions with the Player"""
-    global running
-    global sprite_group
 
     for hit in player_hit:
-        player.shield -= hit.radius * 2
+        game.player.shield -= hit.radius * 2
         expl = Explosion(hit.rect.center,'sm')
-        sprite_group.add(expl)
-        SpawnMob()
-        if player.shield <= 0:
-            death_explosion = Explosion(player.rect.center,'player')
-            sprite_group.add(death_explosion)
-            player.hide()
-            player.shield = 100
+        game.all_sprites.add(expl)
+        SpawnMob(game)
+        if game.player.shield <= 0:
+            death_explosion = Explosion(game.player.rect.center,'player')
+            game.all_sprites.add(death_explosion)
+            game.player.hide()
+            game.player.shield = 100
 
-def HandleMobCollisions(mob:pygame.sprite.Group,mob_hits:list[pygame.sprite.Sprite]):
+    if game.player.lives == 0 and not death_explosion.alive():
+        game.game_over = True
+        
+    
+
+def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) -> int:
     """Handles Meteor impacts"""
-    global score
     for hit in mob_hits:
-        score += 50 - hit.radius
+        game.score += 50 - hit.radius
         expl = Explosion(hit.rect.center,'lg')
-        sprite_group.add(expl)
-        SpawnMob()
+        game.all_sprites.add(expl)
+        SpawnMob(game)

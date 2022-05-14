@@ -1,28 +1,26 @@
+from src.gamemanager import *
 from src.utils import *
-from src.sprites import *
+from src.explosions import *
+from src.collisions import *
 
 def main():
-    """Start the game"""
+    game = GameManager()
+    SetExplosions()
 
-    game = InitializeGameSpace()
-    background = LoadBackground()
-    score = "Hello Leaundrae, Let's Play a Game"
-    running = True
-    game_over = True
     # Game Loop
-    while running == True:
-        if game_over:
-            game_over = False    
-            configured_sprites = ConfigureSprites(MOB_SIZE)
-            sprites = configured_sprites[0]
+    while game.running:
+        if game.game_over:
+            game.reset()
+            ConfigureSprites(game)
 
         #Updates the clock 60 Frames Per Second
-        game[1].tick(FPS)         
-        sprites.update()
-        RenderGraphics(game[0],background,sprites,score,game[2],configured_sprites[2])
-        ProcessCollisions(configured_sprites)
-        ProcessEvents()
-        sprites.draw(game[0])
+        game.clock.tick(FPS)         
+        game.all_sprites.update()
+
+        RenderGraphics(game)
+        ProcessCollisions(game)
+        ProcessEvents(game)
+        game.all_sprites.draw(game.screen)
         pygame.display.flip()
     pygame.quit()
 #If this module is executing the script 

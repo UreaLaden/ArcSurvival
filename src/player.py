@@ -1,11 +1,10 @@
-import pygame
-import sys
-from src.constants import *
+from src.gamemanager import *
 from src.bullets import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,game:GameManager):
         pygame.sprite.Sprite.__init__(self)
+        self.game = game
         self.image = pygame.transform.scale(pygame.image.load(PLAYER_IMG),(80,48))
         self.image.set_colorkey(BLACK) #Any pixels with the same color will be transparent
         self.rect = self.image.get_rect()
@@ -14,12 +13,21 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = SCREEN_HEIGHT - 10
         self.speedx = 0
         self.shield = 100
+        self.lives = 3
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
         self.power = 1
+        self.hide_time = pygame.time.get_ticks()
+        self.hidden = False
 
 
     def update(self):
+        #Unhide if hidden   
+        if self.hidden and pygame.time.get_ticks() - self.hide_time > 1000:
+            self.hidden = False
+            self.rect.centerx = SCREEN_WIDTH / 2
+            self.rect.bottom = SCREEN_HEIGHT - 10
+
         self.speedx = 0
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
@@ -42,7 +50,8 @@ class Player(pygame.sprite.Sprite):
         if now - self.last_shot > self.shoot_delay:
             self.last_shot = now
             if self.power == 1:
-                SpawnBullet(self.rect.centerx,self.rect.centery)
+                SpawnBullet(self.game,self.rect.centerx,self.rect.centery)
+
 
     def hide(self):
         self.hidden = True
