@@ -9,12 +9,14 @@ shield = AudioFiles.SHIELD.value
 gun = AudioFiles.GUN.value
 explosion = AudioFiles.EXPLOSION.value
 player = AudioFiles.PLAYER_DEATH.value
+highscore = AudioFiles.HIGHSCORE.value
 
 shoot_sound = pygame.mixer.Sound(path.join(audio_dir,laser))
 shield_sound = pygame.mixer.Sound(path.join(audio_dir,shield))
 powerup_sound = pygame.mixer.Sound(path.join(audio_dir,gun))
 explosion = pygame.mixer.Sound(path.join(audio_dir,explosion))
 player_die_sound = pygame.mixer.Sound(path.join(audio_dir,player))
+highscore_sound = pygame.mixer.Sound(path.join(audio_dir,highscore))
 shoot_sound.set_volume(0.5)
 
 def LoadAudio():

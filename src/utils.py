@@ -3,6 +3,7 @@ from src.gamemanager import *
 from src.mob import *
 from src.player import *
 from src.enemy import *
+import json
 
 def ShowTitleScreen(game:GameManager):
     background = game.background[Config.SURFACE.value]
@@ -45,13 +46,16 @@ def ConfigureSprites(game:GameManager):
 def ProcessEvents(game:GameManager):
     """Handles events and user input
     Returns false when user quits"""
-
-    keystate = pygame.key.get_pressed()
-    if keystate[pygame.K_ESCAPE]:
-        exit()
+    key = pygame.key.get_pressed()
+    game.score_data[game.user] = game.score
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or key[pygame.K_ESCAPE]:
+            if game.score > game.top_score['score']:
+                game.top_score['user'] = game.user
+                game.top_score['score'] = game.score
             game.running = False
+            pygame.quit()
+            exit()
 
 def RenderGraphics(game:GameManager):
         """Update the full display Surface to the screen after drawing everything"""
@@ -90,3 +94,20 @@ def ScrollBackground(game:GameManager):
     if y2 > Config.SCREEN_HEIGHT.value:
         game.y2 = -Config.SCREEN_HEIGHT.value
 
+def RetrieveScoreData(game:GameManager):
+    try:
+        with open('player_scores.txt') as scores:
+            old_scores = json.load(scores)
+            highscore = game.score
+            user = game.user
+            for k in old_scores.keys():
+                game.score_data[k] = old_scores[k]
+                if old_scores[k] > highscore:
+                    highscore = old_scores[k]
+                    user = k
+            game.top_score['user'] = user
+            game.top_score['score'] = highscore
+    except:
+        game.top_score['user'] = game.user
+        game.top_score['score'] = game.score
+        print("Creating for first time")

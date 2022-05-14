@@ -1,4 +1,4 @@
-import pygame
+import pygame,json
 from os import path
 from src.soundeffects import *
 from src.constants import *
@@ -11,7 +11,6 @@ class GameManager():
         self.game_over    = True    
         self.running      = True
         self.waiting      = True
-        self.score        = 0
         self.mob_size     = 8
         self.fireteam     = 3
         self.font         = pygame.font.match_font(Config.FONT.value)
@@ -27,8 +26,13 @@ class GameManager():
         self.x2           = 0
         self.y1           = 0
         self.y2           = -Config.SCREEN_HEIGHT.value
+        self.user         = ""
+        self.score        = 0
+        self.score_data   = {}
+        self.top_score    = {}
             
     def reset(self):
+        self.ShowUserPrompt()
         self.game_over  = False    
         self.score      = 0
 
@@ -38,7 +42,6 @@ class GameManager():
         LoadAudio()
         pygame.display.set_caption(Config.TITLE.value) #Set the window Title
         self.screen = pygame.display.set_mode((Config.SCREEN_WIDTH.value,Config.SCREEN_HEIGHT.value)) #Initialize the display
-
 
     def LoadBackground(self):
         """Returns a tuple contain the background Image and its Rect"""
@@ -61,7 +64,6 @@ class GameManager():
         text_rect.midtop = (x,y)
         self.screen.blit(text_surface,text_rect)
 
-
     def DrawHealthBar(self,x,y,health):
         if health < 0:
             health = 0
@@ -82,4 +84,46 @@ class GameManager():
             img_rect.y = y
             self.screen.blit(img,img_rect)
 
-    
+    def ShowUserPrompt(self):
+        background = self.background[Config.SURFACE.value]
+        rect = self.background[Config.RECT.value]
+        self.screen.blit(background,rect)
+        self.DrawUIText(Config.TITLE.value,64,Config.SCREEN_WIDTH.value / 2, Config.SCREEN_HEIGHT.value / 4)
+        self.DrawUIText(Config.USER_PROMPT.value,22,Config.SCREEN_WIDTH.value / 2,Config.SCREEN_HEIGHT.value / 2)
+        self.waiting = True
+        pygame.font.init()
+        current_string = ''
+        font = pygame.font.Font(self.font,22)
+        while self.waiting:
+            key = pygame.key.get_pressed()
+            for event in pygame.event.get():
+                if key[pygame.K_ESCAPE]:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key <= 127 and event.key != pygame.K_RETURN:
+                        current_string += chr(event.key)
+                        text_surf:pygame.Surface = font.render(current_string,True,'White')
+                        text_rect:pygame.Rect = text_surf.get_rect()
+                        text_rect.midtop = (Config.SCREEN_WIDTH.value /2, Config.SCREEN_HEIGHT.value * 3 / 4 )
+                        self.screen.blit(background,rect)
+                        self.screen.blit(text_surf,text_rect)
+                        self.DrawUIText(f'HighScore: {self.top_score["user"]} : {self.top_score["score"]}',22,Config.SCREEN_WIDTH.value / 2,Config.SCREEN_HEIGHT.value - Config.SCREEN_HEIGHT.value + 10 )
+                        self.DrawUIText(Config.TITLE.value,64,Config.SCREEN_WIDTH.value / 2, Config.SCREEN_HEIGHT.value / 4)
+                        self.DrawUIText(Config.USER_PROMPT.value,22,Config.SCREEN_WIDTH.value / 2,Config.SCREEN_HEIGHT.value / 2)
+                if  key[pygame.K_RETURN]:
+                    preparing = True
+                    now = pygame.time.get_ticks()
+                    while preparing:
+                        self.user = current_string
+                        self.screen.blit(background,rect)
+                        self.DrawUIText(f"Get Ready {current_string.capitalize()}!",32,Config.SCREEN_WIDTH.value / 2,Config.SCREEN_HEIGHT.value / 2)
+                        pygame.display.update()
+                        current = pygame.time.get_ticks()
+                        if current - now > 5000:
+                            preparing = False
+                    
+                    self.waiting = False
+
+            pygame.display.update()
+            self.clock.tick(Config.FPS.value)      

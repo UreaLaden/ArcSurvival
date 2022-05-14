@@ -54,7 +54,8 @@ def HandlePlayerCollisions(game:GameManager,player_hit:list[pygame.sprite.Sprite
 def HandleEnemyCollisions(game:GameManager,enemy_hits:list[pygame.sprite.Sprite]):
     "When the enemy hits the player"
     for hit in enemy_hits:
-        game.score += 100 - hit.radius
+        game.score += 100 - hit.radius        
+        game.score_data[game.user] = game.score
         explosion.play()
         expl = Explosion(hit.rect.center,ExplosionClass.LARGE.value)
         game.all_sprites.add(expl)
@@ -65,6 +66,8 @@ def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) ->
     for hit in mob_hits:
         explosion.play()
         game.score += 50 - hit.radius
+        
+        game.score_data[game.user] = game.score
         expl = Explosion(hit.rect.center,ExplosionClass.LARGE.value)
         game.all_sprites.add(expl)
         if random.random() <= Config.DROP_CHANCE.value:

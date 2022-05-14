@@ -6,10 +6,17 @@ from src.collisions import *
 def main():
     game = GameManager()
     SetExplosions()
+    RetrieveScoreData(game)
 
     # Game Loop
     while game.running:
         if game.game_over:
+            if game.score > game.top_score['score']:
+                highscore_sound.play()
+                print("New High Score!!")
+            with open('player_scores.txt','w') as scores:
+                json_obj = json.dumps(game.score_data,indent=4)
+                scores.write(json_obj)
             game.reset()
             ShowTitleScreen(game)
             ConfigureSprites(game)

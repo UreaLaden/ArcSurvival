@@ -15,6 +15,7 @@ class Config(Enum):
     TITLE:str = 'ARC SURVIVAL 2.0'
     CONTROLS:str = 'Use the Arrow keys to move and Space Bar to fire'
     INSTRUCTIONS:str = 'Press Return key to begin or Escape to Exit'
+    USER_PROMPT:str = "What's youre name pilot? "
     SURFACE:str = 'surface'
     RECT:str = 'rect'
     FONT:str = 'arial'
@@ -41,6 +42,7 @@ class AudioFiles(Enum):
     EXPLOSION:str = 'Explosion2.wav'
     PLAYER_DEATH:str = 'playerExplosion.wav'
     BACKGROUND_MUSIC:str = 'Orbital Colossus.mp3'
+    HIGHSCORE:str = 'highscore.wav'
 
 class SpriteImages(Enum):
     BOLT:str = 'bolt_gold.png'
