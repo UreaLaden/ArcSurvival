@@ -39,10 +39,12 @@ class GameManager():
     def LoadBackground(self):
         """Returns a tuple contain the background Image and its Rect"""
         img_dir = path.join(IMG_DIR,'Background-4.jpg')
-        image = pygame.image.load(img_dir).convert()
-        rect = image.get_rect()
         
-        return (image,rect)
+        background = {}
+        background['rect'] = pygame.image.load(img_dir).convert().get_rect()
+        background['surface'] = pygame.image.load(img_dir).convert()
+
+        return background
 
     def DrawUIText(self,ui_text:str,size:int,x:int,y:int):
         """Renders UI onto the Screen

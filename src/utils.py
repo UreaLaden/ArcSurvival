@@ -5,8 +5,8 @@ from src.player import *
 from src.enemy import *
 
 def ShowTitleScreen(game:GameManager):
-    background = game.background[0]
-    rect = game.background[1]
+    background = game.background['surface']
+    rect = game.background['rect']
     game.screen.blit(background,rect)
     game.DrawUIText('ARC SURVIVAL 2.0',64,SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4)
     game.DrawUIText('Use the Arrow keys to move and Space Bar to fire',22,SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
@@ -75,8 +75,8 @@ def ScrollBackground(game:GameManager):
     x2 = game.x2
     y1 = game.y1
     y2 = game.y2
-    background_surface = game.background[0]
-    rect = game.background[1]
+    background_surface = game.background['surface']
+    rect = game.background['rect']
     
     game.screen.blit(background_surface,rect)
 
