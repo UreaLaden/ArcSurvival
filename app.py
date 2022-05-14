@@ -15,7 +15,7 @@ def main():
             ConfigureSprites(game)
 
         #Updates the clock 60 Frames Per Second
-        game.clock.tick(FPS)         
+        game.clock.tick(Config.FPS.value)         
         game.all_sprites.update()
 
         RenderGraphics(game)
@@ -24,7 +24,7 @@ def main():
 
         game.all_sprites.draw(game.screen)
         pygame.display.flip()
-        
+
     pygame.quit()
 #If this module is executing the script 
 #the global variable __name__ gets set to __main__

@@ -7,8 +7,8 @@ from src.soundeffects import *
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(path.join(IMG_DIR,'laserRed16.png'))
-        self.image.set_colorkey(BLACK)
+        self.image = pygame.image.load(path.join(Directories.IMG_DIR.value,SpriteImages.LASER.value))
+        self.image.set_colorkey(Colors.BLACK.value)
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x

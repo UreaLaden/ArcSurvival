@@ -4,9 +4,6 @@ from src.mob import *
 from src.enemy import *
 from src.pickup import *
 
-def CheckCollision(first_group:pygame.sprite.Group,second_group:pygame.sprite.Group,dokill:bool = True,dokill2:bool = True) -> bool:
-    return pygame.sprite.groupcollide(first_group,second_group,dokill,dokill2)
-
 def ProcessCollisions(game:GameManager) -> bool :
     """Process all collisions and return False when the player is hit"""
 
@@ -27,28 +24,27 @@ def ProcessCollisions(game:GameManager) -> bool :
     HandleEnemyCollisions(game,enemy_hits)
     HandlePickupCollisions(game,pickup_hits)
 
-
 def HandlePlayerCollisions(game:GameManager,player_hit:list[pygame.sprite.Sprite],alien_hits:list[pygame.sprite.Sprite]):
     """When a player is hit"""
 
     for hit in player_hit:
         game.player.shield -= hit.radius * 2
-        game.explosions = Explosion(hit.rect.center,'sm')
+        game.explosions = Explosion(hit.rect.center,ExplosionClass.SMALL.value)
         game.all_sprites.add(game.explosions)
         SpawnMob(game)
         if game.player.shield <= 0:
             player_die_sound.play()
-            game.explosions = Explosion(game.player.rect.center,'player')
+            game.explosions = Explosion(game.player.rect.center,ExplosionClass.PLAYER.value)
             game.all_sprites.add(game.explosions)
             game.player.die()
 
     for hit in alien_hits:
         game.player.shield -= hit.radius * 2
-        game.explosions = Explosion(hit.rect.center,'lg')
+        game.explosions = Explosion(hit.rect.center,ExplosionClass.LARGE.value)
         game.all_sprites.add(game.explosions)
         SpawnFireTeam(game)
         if game.player.shield <= 0:
-            game.explosions = Explosion(game.player.rect.center,'player')
+            game.explosions = Explosion(game.player.rect.center,ExplosionClass.PLAYER.value)
             game.all_sprites.add(game.explosions)
             game.player.die()
 
@@ -60,7 +56,7 @@ def HandleEnemyCollisions(game:GameManager,enemy_hits:list[pygame.sprite.Sprite]
     for hit in enemy_hits:
         game.score += 100 - hit.radius
         explosion.play()
-        expl = Explosion(hit.rect.center,'lg')
+        expl = Explosion(hit.rect.center,ExplosionClass.LARGE.value)
         game.all_sprites.add(expl)
         SpawnFireTeam(game)
 
@@ -69,9 +65,9 @@ def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) ->
     for hit in mob_hits:
         explosion.play()
         game.score += 50 - hit.radius
-        expl = Explosion(hit.rect.center,'lg')
+        expl = Explosion(hit.rect.center,ExplosionClass.LARGE.value)
         game.all_sprites.add(expl)
-        if random.random() > 0.9:
+        if random.random() <= Config.DROP_CHANCE.value:
             powerup = Pickup(hit.rect.center)
             game.all_sprites.add(powerup)
             game.power_group.add(powerup)
@@ -79,11 +75,11 @@ def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) ->
 
 def HandlePickupCollisions(game:GameManager,pickup_hits:list[pygame.sprite.Sprite]):
     for hit in pickup_hits:
-        if hit.type == 'shield':
+        if hit.type == CollisionTypes.SHIELD.value:
             shield_sound.play()
             game.player.shield += random.randrange(10,30)
             if game.player.shield >= 100:
                 game.player.shield = 100
-        if hit.type == 'gun':
+        if hit.type == CollisionTypes.GUN.value:
             game.player.powerup()
             powerup_sound.play()

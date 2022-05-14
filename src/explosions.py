@@ -1,9 +1,9 @@
 from src.gamemanager import *
 
 explosion_anim = {}
-explosion_anim['lg'] = []
-explosion_anim['sm'] = []
-explosion_anim['player'] = []
+explosion_anim[ExplosionClass.LARGE.value] = []
+explosion_anim[ExplosionClass.SMALL.value] = []
+explosion_anim[ExplosionClass.PLAYER.value] = []
 
 class Explosion(pygame.sprite.Sprite):
     def __init__(self,center,size):
@@ -35,21 +35,17 @@ def SetExplosions():
 
     for i in range(24):
         filename = 'expl_01_{}.png'.format(i)
-        img = pygame.image.load(path.join(IMG_DIR,'Explosions',filename)).convert()
-        img.set_colorkey(BLACK)
+        img = pygame.image.load(path.join(Directories.IMG_DIR.value,Directories.EXPLOSIONS.value,filename)).convert()
+        img.set_colorkey(Colors.BLACK.value)
 
         img_lg = pygame.transform.scale(img,(75,75))
         img_sm = pygame.transform.scale(img,(32,32))
 
-        explosion_anim['lg'].append(img_lg)
-        explosion_anim['sm'].append(img_sm)
+        explosion_anim[ExplosionClass.LARGE.value].append(img_lg)
+        explosion_anim[ExplosionClass.SMALL.value].append(img_sm)
 
         #player explosion images same 24
         filename = 'expl_10_00{}.png'.format(i)
-        img = pygame.image.load(path.join(IMG_DIR,'Explosions',filename)).convert()
-        img.set_colorkey(BLACK)
-        explosion_anim['player'].append(img)
-    '''
-        for k in explosion_anim.keys():
-            print(explosion_anim[k])
-    '''
+        img = pygame.image.load(path.join(Directories.IMG_DIR.value,Directories.EXPLOSIONS.value,filename)).convert()
+        img.set_colorkey(Colors.BLACK.value)
+        explosion_anim[ExplosionClass.PLAYER.value].append(img)

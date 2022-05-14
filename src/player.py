@@ -6,12 +6,12 @@ class Player(pygame.sprite.Sprite):
     def __init__(self,game:GameManager):
         pygame.sprite.Sprite.__init__(self)
         self.game = game
-        self.image = pygame.transform.scale(pygame.image.load(PLAYER_IMG),(80,48))
-        self.image.set_colorkey(BLACK) #Any pixels with the same color will be transparent
+        self.image = pygame.transform.scale(pygame.image.load(Directories.PLAYER_IMG.value),(80,48))
+        self.image.set_colorkey(Colors.BLACK.value) #Any pixels with the same color will be transparent
         self.rect = self.image.get_rect()
-        self.radius = PLAYER_RADIUS
-        self.rect.centerx = SCREEN_WIDTH / 2
-        self.rect.bottom = SCREEN_HEIGHT - 10
+        self.radius = Config.PLAYER_RADIUS.value
+        self.rect.centerx = Config.SCREEN_WIDTH.value / 2
+        self.rect.bottom = Config.SCREEN_HEIGHT.value - 10
         self.speedx = 0
         self.shield = 100
         self.lives = 3
@@ -23,14 +23,14 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         #timeout of powerups
-        if self.power >= 2 and pygame.time.get_ticks() - self.power_time > POWERUP_TIME:
+        if self.power >= 2 and pygame.time.get_ticks() - self.power_time > Config.POWERUP_TIME.value:
             self.power -= 1
             self.power_time = pygame.time.get_ticks()
         #Unhide if hidden   
         if self.hidden and pygame.time.get_ticks() - self.hide_time > 1000:
             self.hidden = False
-            self.rect.centerx = SCREEN_WIDTH / 2
-            self.rect.bottom = SCREEN_HEIGHT - 10
+            self.rect.centerx = Config.SCREEN_WIDTH.value / 2
+            self.rect.bottom = Config.SCREEN_HEIGHT.value - 10
 
         self.speedx = 0
         keystate = pygame.key.get_pressed()
@@ -44,8 +44,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.x += self.speedx
 
         # Keep sprite on screen
-        if self.rect.right > SCREEN_WIDTH:
-            self.rect.right = SCREEN_WIDTH
+        if self.rect.right > Config.SCREEN_WIDTH.value:
+            self.rect.right = Config.SCREEN_WIDTH.value
         if self.rect.left < 0:
             self.rect.left = 0
 
@@ -62,7 +62,7 @@ class Player(pygame.sprite.Sprite):
     def hide(self):
         self.hidden = True
         self.hide_time = pygame.time.get_ticks()
-        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT + 200)
+        self.rect.center = (Config.SCREEN_WIDTH.value / 2, Config.SCREEN_HEIGHT.value + 200)
     
     def die(self):
         self.hide()

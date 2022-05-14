@@ -5,16 +5,16 @@ from src.player import *
 from src.enemy import *
 
 def ShowTitleScreen(game:GameManager):
-    background = game.background['surface']
-    rect = game.background['rect']
+    background = game.background[Config.SURFACE.value]
+    rect = game.background[Config.RECT.value]
     game.screen.blit(background,rect)
-    game.DrawUIText('ARC SURVIVAL 2.0',64,SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4)
-    game.DrawUIText('Use the Arrow keys to move and Space Bar to fire',22,SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
-    game.DrawUIText('Press Return key to begin or Escape to Exit',18, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4)
+    game.DrawUIText(Config.TITLE.value,64,Config.SCREEN_WIDTH.value / 2, Config.SCREEN_HEIGHT.value / 4)
+    game.DrawUIText(Config.CONTROLS.value,22,Config.SCREEN_WIDTH.value / 2,Config.SCREEN_HEIGHT.value / 2)
+    game.DrawUIText(Config.INSTRUCTIONS.value,18, Config.SCREEN_WIDTH.value / 2, Config.SCREEN_HEIGHT.value * 3 / 4)
     pygame.display.flip()
     game.waiting = True
     while game.waiting:
-        game.clock.tick(FPS)
+        game.clock.tick(Config.FPS.value)
         keystate = keystate = pygame.key.get_pressed()
         for _ in pygame.event.get():
             if keystate[pygame.K_ESCAPE]:
@@ -60,9 +60,9 @@ def RenderGraphics(game:GameManager):
 
         game.all_sprites.draw(game.screen)
 
-        game.DrawUIText(str(game.score),18,SCREEN_WIDTH / 2, 10)
+        game.DrawUIText(str(game.score),18,Config.SCREEN_WIDTH.value / 2, 10)
         game.DrawHealthBar(5,5,game.player.shield)
-        game.DrawLives(SCREEN_WIDTH - 100,5,game.player.lives)
+        game.DrawLives(Config.SCREEN_WIDTH.value - 100,5,game.player.lives)
 
         pygame.display.flip()
 
@@ -74,8 +74,8 @@ def ScrollBackground(game:GameManager):
     x2 = game.x2
     y1 = game.y1
     y2 = game.y2
-    background_surface = game.background['surface']
-    rect = game.background['rect']
+    background_surface = game.background[Config.SURFACE.value]
+    rect = game.background[Config.RECT.value]
     
     game.screen.blit(background_surface,rect)
 
@@ -85,8 +85,8 @@ def ScrollBackground(game:GameManager):
     game.screen.blit(background_surface,(x1,y1))
     game.screen.blit(background_surface,(x2,y2))
     
-    if y1 > SCREEN_HEIGHT:
-        game.y1 = -SCREEN_HEIGHT
-    if y2 > SCREEN_HEIGHT:
-        game.y2 = -SCREEN_HEIGHT
+    if y1 > Config.SCREEN_HEIGHT.value:
+        game.y1 = -Config.SCREEN_HEIGHT.value
+    if y2 > Config.SCREEN_HEIGHT.value:
+        game.y2 = -Config.SCREEN_HEIGHT.value
 
