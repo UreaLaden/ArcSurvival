@@ -9,13 +9,16 @@ class GameManager():
         self.background   = self.LoadBackground()
         self.game_over    = True    
         self.running      = True
+        self.waiting      = True
         self.score        = 0
         self.mob_size     = 8
+        self.fireteam     = 3
         self.font         = pygame.font.match_font('arial')
         self.clock        = pygame.time.Clock() #Used to help track time
         #Sprite Groups
         self.all_sprites  = pygame.sprite.Group()
         self.mob_group    = pygame.sprite.Group()
+        self.enemy_group  = pygame.sprite.Group()
         self.bullet_group = pygame.sprite.Group()
         self.x1           = 0
         self.x2           = 0
@@ -41,13 +44,13 @@ class GameManager():
         
         return (image,rect)
 
-    def DrawUIText(self,size:int,x:int,y:int):
+    def DrawUIText(self,ui_text:str,size:int,x:int,y:int):
         """Renders UI onto the Screen
             screen,font_name,text,size,x,y
         """
         
         font = pygame.font.Font(self.font,size)
-        text_surface = font.render(str(self.score),True,WHITE)
+        text_surface = font.render(ui_text,True,WHITE)
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x,y)
         self.screen.blit(text_surface,text_rect)

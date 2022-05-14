@@ -11,6 +11,7 @@ def main():
     while game.running:
         if game.game_over:
             game.reset()
+            ShowTitleScreen(game)
             ConfigureSprites(game)
 
         #Updates the clock 60 Frames Per Second

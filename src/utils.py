@@ -2,6 +2,24 @@ from sys import exit
 from src.gamemanager import *
 from src.mob import *
 from src.player import *
+from src.enemy import *
+
+def ShowTitleScreen(game:GameManager):
+    background = game.background[0]
+    rect = game.background[1]
+    game.screen.blit(background,rect)
+    game.DrawUIText('ARC SURVIVAL 2.0',64,SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4)
+    game.DrawUIText('Use the Arrow keys to move and Space Bar to fire',22,SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
+    game.DrawUIText('Press any key to begin',18, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4)
+    pygame.display.flip()
+    game.waiting = True
+    while game.waiting:
+        game.clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                game.waiting = False
 
 def ConfigureSprites(game:GameManager):
     """Creates our Sprite Group, adds
@@ -13,10 +31,14 @@ def ConfigureSprites(game:GameManager):
     game.all_sprites = pygame.sprite.Group()
     game.mob_group = pygame.sprite.Group()
     game.bullet_group = pygame.sprite.Group()
+    game.enemy_group = pygame.sprite.Group()
     game.player = Player(game)
     
     for _ in range(game.mob_size):
         SpawnMob(game)
+    
+    for _ in range(game.fireteam):
+        SpawnFireTeam(game)
 
     game.all_sprites.add(game.bullet_group)
     game.all_sprites.add(game.player)
@@ -39,7 +61,7 @@ def RenderGraphics(game:GameManager):
 
         game.all_sprites.draw(game.screen)
 
-        game.DrawUIText(18,SCREEN_WIDTH / 2, 10)
+        game.DrawUIText(str(game.score),18,SCREEN_WIDTH / 2, 10)
         game.DrawHealthBar(5,5,game.player.shield)
         game.DrawLives(SCREEN_WIDTH - 100,5,game.player.lives)
 
