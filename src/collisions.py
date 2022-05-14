@@ -33,31 +33,33 @@ def HandlePlayerCollisions(game:GameManager,player_hit:list[pygame.sprite.Sprite
 
     for hit in player_hit:
         game.player.shield -= hit.radius * 2
-        expl = Explosion(hit.rect.center,'sm')
-        game.all_sprites.add(expl)
+        game.explosions = Explosion(hit.rect.center,'sm')
+        game.all_sprites.add(game.explosions)
         SpawnMob(game)
         if game.player.shield <= 0:
-            death_explosion = Explosion(game.player.rect.center,'player')
-            game.all_sprites.add(death_explosion)
+            player_die_sound.play()
+            game.explosions = Explosion(game.player.rect.center,'player')
+            game.all_sprites.add(game.explosions)
             game.player.die()
 
     for hit in alien_hits:
         game.player.shield -= hit.radius * 2
-        expl = Explosion(hit.rect.center,'lg')
-        game.all_sprites.add(expl)
+        game.explosions = Explosion(hit.rect.center,'lg')
+        game.all_sprites.add(game.explosions)
         SpawnFireTeam(game)
         if game.player.shield <= 0:
-            death_explosion = Explosion(game.player.rect.center,'player')
-            game.all_sprites.add(death_explosion)
+            game.explosions = Explosion(game.player.rect.center,'player')
+            game.all_sprites.add(game.explosions)
             game.player.die()
 
-    if game.player.lives == 0 :
+    if game.player.lives == 0 and not game.explosions.alive() :
         game.game_over = True
         
 def HandleEnemyCollisions(game:GameManager,enemy_hits:list[pygame.sprite.Sprite]):
     "When the enemy hits the player"
     for hit in enemy_hits:
         game.score += 100 - hit.radius
+        explosion.play()
         expl = Explosion(hit.rect.center,'lg')
         game.all_sprites.add(expl)
         SpawnFireTeam(game)
@@ -65,6 +67,7 @@ def HandleEnemyCollisions(game:GameManager,enemy_hits:list[pygame.sprite.Sprite]
 def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) -> int:
     """When a bullet hits a meteor"""
     for hit in mob_hits:
+        explosion.play()
         game.score += 50 - hit.radius
         expl = Explosion(hit.rect.center,'lg')
         game.all_sprites.add(expl)
@@ -77,8 +80,10 @@ def HandleMobCollisions(game:GameManager,mob_hits:list[pygame.sprite.Sprite]) ->
 def HandlePickupCollisions(game:GameManager,pickup_hits:list[pygame.sprite.Sprite]):
     for hit in pickup_hits:
         if hit.type == 'shield':
+            shield_sound.play()
             game.player.shield += random.randrange(10,30)
             if game.player.shield >= 100:
                 game.player.shield = 100
         if hit.type == 'gun':
             game.player.powerup()
+            powerup_sound.play()

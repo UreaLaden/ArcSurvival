@@ -2,6 +2,7 @@ import pygame
 from os import path
 from src.constants import *
 from src.gamemanager import *
+from src.soundeffects import *
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,x,y):
@@ -22,4 +23,5 @@ def SpawnBullet(game:GameManager,x:int,y:int):
     bullet = Bullet(x,y)
     game.all_sprites.add(bullet)
     game.bullet_group.add(bullet)
+    shoot_sound.play()
 

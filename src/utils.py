@@ -24,11 +24,7 @@ def ShowTitleScreen(game:GameManager):
                 game.waiting = False
 
 def ConfigureSprites(game:GameManager):
-    """Creates our Sprite Group, adds
-    the relevant Sprite Objects to the Group
-    rent returns all of the sprite groups
-    (sprite_group,mob_group,player,bullet_group)
-    """
+    """Initialize Sprite Groups"""
     #Sprite Objects
     game.all_sprites = pygame.sprite.Group()
     game.mob_group = pygame.sprite.Group()

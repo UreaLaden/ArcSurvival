@@ -1,5 +1,6 @@
 import pygame
 from os import path
+from src.soundeffects import *
 from src.constants import *
 
 class GameManager():
@@ -21,6 +22,7 @@ class GameManager():
         self.enemy_group  = pygame.sprite.Group()
         self.bullet_group = pygame.sprite.Group()
         self.power_group  = pygame.sprite.Group()
+        self.explosions   = pygame.sprite.Group()
         self.x1           = 0
         self.x2           = 0
         self.y1           = 0
@@ -33,6 +35,7 @@ class GameManager():
     def InitializeGameSpace(self):
         """Initialize Pygame"""
         pygame.init()
+        LoadAudio()
         pygame.display.set_caption("Arc Survival") #Set the window Title
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT)) #Initialize the display
 
