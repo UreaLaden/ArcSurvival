@@ -21,8 +21,10 @@ def main():
         RenderGraphics(game)
         ProcessCollisions(game)
         ProcessEvents(game)
+
         game.all_sprites.draw(game.screen)
         pygame.display.flip()
+        
     pygame.quit()
 #If this module is executing the script 
 #the global variable __name__ gets set to __main__

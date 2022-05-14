@@ -1,5 +1,6 @@
 from src.gamemanager import *
 from src.bullets import *
+import random
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,game:GameManager):
@@ -20,8 +21,11 @@ class Player(pygame.sprite.Sprite):
         self.hide_time = pygame.time.get_ticks()
         self.hidden = False
 
-
     def update(self):
+        #timeout of powerups
+        if self.power >= 2 and pygame.time.get_ticks() - self.power_time > POWERUP_TIME:
+            self.power -= 1
+            self.power_time = pygame.time.get_ticks()
         #Unhide if hidden   
         if self.hidden and pygame.time.get_ticks() - self.hide_time > 1000:
             self.hidden = False
@@ -51,12 +55,27 @@ class Player(pygame.sprite.Sprite):
             self.last_shot = now
             if self.power == 1:
                 SpawnBullet(self.game,self.rect.centerx,self.rect.centery)
-
+            if self.power >= 2:
+                SpawnBullet(self.game,self.rect.left,self.rect.centery)
+                SpawnBullet(self.game,self.rect.right,self.rect.centery)
 
     def hide(self):
         self.hidden = True
         self.hide_time = pygame.time.get_ticks()
         self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT + 200)
+    
+    def die(self):
+        self.hide()
+        self.lives -= 1
+        self.shield = 100
 
+    def powerup(self):
+        self.power += 1
+        self.power_time = pygame.time.get_ticks()
+
+    def heal(self):
+        self.shield += random.randrange(10,30)
+        if self.shield >= 100:
+            self.shield = 100
 
     

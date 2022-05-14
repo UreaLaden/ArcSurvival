@@ -7,7 +7,7 @@ from os import listdir
 def GetMeteors() -> pygame.Surface:
     """Take all of our meteor images to a list for later"""
     meteor_dir = path.join(IMG_DIR,'Meteors')
-    meteor_list = listdir(path.join(IMG_DIR,'Meteors'))
+    meteor_list = listdir(meteor_dir)
     meteors = []
     for img in meteor_list:
         meteors.append(pygame.image.load(path.join(meteor_dir,img)).convert())

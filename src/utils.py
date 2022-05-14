@@ -10,15 +10,17 @@ def ShowTitleScreen(game:GameManager):
     game.screen.blit(background,rect)
     game.DrawUIText('ARC SURVIVAL 2.0',64,SCREEN_WIDTH / 2, SCREEN_HEIGHT / 4)
     game.DrawUIText('Use the Arrow keys to move and Space Bar to fire',22,SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2)
-    game.DrawUIText('Press any key to begin',18, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4)
+    game.DrawUIText('Press Return key to begin or Escape to Exit',18, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 3 / 4)
     pygame.display.flip()
     game.waiting = True
     while game.waiting:
         game.clock.tick(FPS)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        keystate = keystate = pygame.key.get_pressed()
+        for _ in pygame.event.get():
+            if keystate[pygame.K_ESCAPE]:
                 pygame.quit()
-            if event.type == pygame.KEYUP:
+                exit()
+            if keystate[pygame.K_RETURN]:
                 game.waiting = False
 
 def ConfigureSprites(game:GameManager):
@@ -32,6 +34,7 @@ def ConfigureSprites(game:GameManager):
     game.mob_group = pygame.sprite.Group()
     game.bullet_group = pygame.sprite.Group()
     game.enemy_group = pygame.sprite.Group()
+    game.power_group = pygame.sprite.Group()
     game.player = Player(game)
     
     for _ in range(game.mob_size):

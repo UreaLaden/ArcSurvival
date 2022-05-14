@@ -20,6 +20,7 @@ class GameManager():
         self.mob_group    = pygame.sprite.Group()
         self.enemy_group  = pygame.sprite.Group()
         self.bullet_group = pygame.sprite.Group()
+        self.power_group  = pygame.sprite.Group()
         self.x1           = 0
         self.x2           = 0
         self.y1           = 0
@@ -40,9 +41,9 @@ class GameManager():
         """Returns a tuple contain the background Image and its Rect"""
         img_dir = path.join(IMG_DIR,'Background-4.jpg')
         
-        background = {}
-        background['rect'] = pygame.image.load(img_dir).convert().get_rect()
+        background:dict[pygame.Surface,pygame.Rect] = {}
         background['surface'] = pygame.image.load(img_dir).convert()
+        background['rect'] = pygame.image.load(img_dir).convert().get_rect()
 
         return background
 
