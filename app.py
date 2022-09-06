@@ -1,4 +1,4 @@
-from src.gamemanager import *
+from src.gamemanager import GameManager
 from src.utils import *
 from src.explosions import *
 from src.collisions import *

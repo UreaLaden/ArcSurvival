@@ -13,6 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = Config.SCREEN_WIDTH.value / 2
         self.rect.bottom = Config.SCREEN_HEIGHT.value - 10
         self.speedx = 0
+       
         self.shield = 100
         self.lives = 3
         self.shoot_delay = 250

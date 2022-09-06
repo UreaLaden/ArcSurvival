@@ -15,13 +15,14 @@ class Config(Enum):
     TITLE:str = 'ARC SURVIVAL 2.0'
     CONTROLS:str = 'Use the Arrow keys to move and Space Bar to fire'
     INSTRUCTIONS:str = 'Press Return key to begin or Escape to Exit'
-    USER_PROMPT:str = "What's youre name pilot? "
+    USER_PROMPT:str = "What's your name pilot? "
     SURFACE:str = 'surface'
     RECT:str = 'rect'
     FONT:str = 'arial'
     FPS:int = 60
     SCREEN_HEIGHT:int = 600
     SCREEN_WIDTH:int = 480
+
     PLAYER_HEIGHT:int = 80
     PLAYER_WIDTH:int = 48
     PLAYER_RADIUS:int = 20
@@ -29,8 +30,7 @@ class Config(Enum):
     MOB_SIZE:int = 8
     FIRE_TEAM_SIZE:int = 3
     BAR_LENGTH:int = 100
-    BAR_HEIGHT:int = 10
-    
+    BAR_HEIGHT:int = 10    
     DROP_CHANCE:float = 0.1
     SHOT_VOLUME:float = 0.5
 
